@@ -5,19 +5,24 @@ package iamquang95.todo
 import scala.collection.mutable.ListBuffer
 
 import cats.effect.IO
+import com.typesafe.scalalogging.Logger
 import iamquang95.todo.model.{TodoItem, TodoItemData}
 
 final class TodoRepository(
   private val todoItems: ListBuffer[TodoItem]
 ) {
 
+  private val logger = Logger(classOf[TodoRepository])
+
   def getItem(id: String): IO[Option[TodoItem]] = {
+    logger.info(s"Get item with id: $id")
     IO {
       todoItems.find(_.id == id)
     }
   }
 
   def addItem(data: TodoItemData): IO[String] = {
+    logger.info(s"Try to add TodoItem with data: $data")
     for {
       newId <- TodoItem.generateId
       newItem = TodoItem(newId, data)
@@ -28,6 +33,7 @@ final class TodoRepository(
   }
 
   def updateItem(updatedItem: TodoItem): IO[Unit] = {
+    logger.info(s"Update item with id = ${updatedItem.id} as $updatedItem")
     for {
       // TODO: Add validate update unknown item
       _ <- IO {
@@ -40,6 +46,7 @@ final class TodoRepository(
   }
 
   def deleteItem(id: String): IO[Option[String]] = {
+    logger.info("Delete item with id = $id")
     for {
       itemOpt <- IO(todoItems.find(_.id == id))
       _ <- IO(todoItems.filterNot(item => itemOpt.map(_.id).contains(item.id)))
