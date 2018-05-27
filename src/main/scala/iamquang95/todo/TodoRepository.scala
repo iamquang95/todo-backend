@@ -31,7 +31,7 @@ final class TodoRepository(
     for {
       // TODO: Add validate update unknown item
       _ <- IO {
-        todoItems.filterNot(_.id == updatedItem.id)
+        todoItems --= todoItems.find(_.id == updatedItem.id).toSeq
       }
       _ <- IO {
         todoItems += updatedItem
@@ -39,9 +39,13 @@ final class TodoRepository(
     } yield ()
   }
 
-  def deleteItem(id: String): IO[Unit] = {
-    val item =  todoItems.find(_.id == id)
-    IO(item.fold(throw new RuntimeException("Delete unknown item"))(_ => todoItems.filterNot(_.id == id)))
+  def deleteItem(id: String): IO[Option[String]] = {
+    for {
+      itemOpt <- IO(todoItems.find(_.id == id))
+      _ <- IO(todoItems.filterNot(item => itemOpt.map(_.id).contains(item.id)))
+    } yield {
+      itemOpt.map(_.id)
+    }
   }
 }
 
