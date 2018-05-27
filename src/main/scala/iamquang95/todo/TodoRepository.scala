@@ -14,6 +14,11 @@ final class TodoRepository(
 
   private val logger = Logger(classOf[TodoRepository])
 
+  def getAll: IO[Seq[TodoItem]] = {
+    logger.info("Get all todoItems")
+    IO(todoItems)
+  }
+
   def getItem(id: String): IO[Option[TodoItem]] = {
     logger.info(s"Get item with id: $id")
     IO {
