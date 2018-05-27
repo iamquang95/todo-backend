@@ -1,3 +1,11 @@
+enablePlugins(JavaAppPackaging)
+
+herokuAppName in Compile := "http4s-todo"
+
+herokuProcessTypes in Compile := Map(
+  "web" -> "target/universal/stage/bin/http4s-todo -Dhttp.port=$PORT"
+)
+
 val Http4sVersion = "0.18.11"
 val Specs2Version = "4.2.0"
 val LogbackVersion = "1.2.3"

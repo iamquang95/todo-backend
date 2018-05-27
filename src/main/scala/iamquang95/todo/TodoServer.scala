@@ -44,9 +44,13 @@ object TodoServer extends StreamApp[IO] with Http4sDsl[IO] {
       todoRepo.deleteItem(todoId).flatMap(_.fold(NotFound())(_ => NoContent()))
   }
 
-  def stream(args: List[String], requestShutdown: IO[Unit]) =
+  def stream(args: List[String], requestShutdown: IO[Unit]) = {
+
+    val port: Int = sys.env.getOrElse("PORT", "8080").toInt
+
     BlazeBuilder[IO]
-      .bindHttp(8080, "0.0.0.0")
+      .bindHttp(port, "0.0.0.0")
       .mountService(service, "/")
       .serve
+  }
 }
