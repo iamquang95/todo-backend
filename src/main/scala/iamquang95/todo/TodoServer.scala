@@ -8,10 +8,11 @@ import iamquang95.todo.model.{TodoItem, TodoItemData}
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.blaze.BlazeBuilder
 import scala.concurrent.ExecutionContext.Implicits.global
-import org.http4s.{EntityDecoder, EntityEncoder, HttpService}
 
+import org.http4s.{EntityDecoder, EntityEncoder, HttpService}
 import org.http4s.circe._
 import io.circe.generic.auto._
+import org.http4s.server.middleware.CORS
 
 object TodoServer extends StreamApp[IO] with Http4sDsl[IO] {
 
@@ -33,7 +34,7 @@ object TodoServer extends StreamApp[IO] with Http4sDsl[IO] {
 
   private val APIUrl = "todo"
 
-  val service = HttpService[IO] {
+  private val serviceRoutes = HttpService[IO] {
 
     case GET -> Root / APIUrl =>
       todoRepo.getAll.flatMap(Ok(_))
@@ -56,6 +57,8 @@ object TodoServer extends StreamApp[IO] with Http4sDsl[IO] {
   def stream(args: List[String], requestShutdown: IO[Unit]) = {
 
     val port: Int = sys.env.getOrElse("PORT", "8080").toInt
+
+    val service: HttpService[IO] = CORS[IO](serviceRoutes)
 
     BlazeBuilder[IO]
       .bindHttp(port, "0.0.0.0")
