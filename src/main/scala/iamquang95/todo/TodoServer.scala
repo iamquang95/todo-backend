@@ -9,12 +9,17 @@ import org.http4s.dsl.Http4sDsl
 import org.http4s.server.blaze.BlazeBuilder
 import scala.concurrent.ExecutionContext.Implicits.global
 
+import io.circe.generic.extras.Configuration
 import org.http4s.{EntityDecoder, EntityEncoder, HttpService}
-import org.http4s.circe._
-import io.circe.generic.auto._
 import org.http4s.server.middleware.CORS
 
+import org.http4s.circe._
+import io.circe.generic.extras.auto._
+
 object TodoServer extends StreamApp[IO] with Http4sDsl[IO] {
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+
 
   implicit val todoItemDataDecoder: EntityDecoder[IO, TodoItemData] =
     jsonOf[IO, TodoItemData]
@@ -45,6 +50,7 @@ object TodoServer extends StreamApp[IO] with Http4sDsl[IO] {
         .flatMap(_.fold(NotFound())(Ok(_)))
 
     case req @ POST -> Root / APIUrl =>
+      println(s"req = ${req}")
       req.as[TodoItemData].flatMap(todoRepo.addItem).flatMap(Created(_))
 
     case req @ PUT -> Root / APIUrl =>
@@ -52,6 +58,9 @@ object TodoServer extends StreamApp[IO] with Http4sDsl[IO] {
 
     case DELETE -> Root / APIUrl / todoId =>
       todoRepo.deleteItem(todoId).flatMap(_.fold(NotFound())(_ => NoContent()))
+
+    case _ =>
+      BadRequest()
   }
 
   def stream(args: List[String], requestShutdown: IO[Unit]) = {
