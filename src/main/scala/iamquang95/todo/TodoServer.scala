@@ -52,8 +52,8 @@ object TodoServer extends StreamApp[IO] with Http4sDsl[IO] {
     case req @ POST -> Root / APIUrl =>
       req.as[TodoItemData].flatMap(todoRepo.addItem).flatMap(Created(_))
 
-    case req @ PATCH -> Root / APIUrl =>
-      req.as[TodoItem].flatMap(todoRepo.updateItem).flatMap(Ok(_))
+    case req @ PATCH -> Root / APIUrl / todoId=>
+      req.as[TodoItemData].flatMap(todoRepo.updateItem(todoId, _)).flatMap(Ok(_))
 
     case DELETE -> Root / APIUrl / todoId =>
       todoRepo.deleteItem(todoId).flatMap(_.fold(NotFound())(_ => NoContent()))

@@ -37,13 +37,14 @@ final class TodoRepository(
     } yield newItem
   }
 
-  def updateItem(updatedItem: TodoItem): IO[TodoItem] = {
-    logger.info(s"Update item with id = ${updatedItem.id} as $updatedItem")
+  def updateItem(id: String, data: TodoItemData): IO[TodoItem] = {
+    logger.info(s"Update item with id = $id as $data")
     for {
       // TODO: Add validate update unknown item
       _ <- IO {
-        todoItems --= todoItems.find(_.id == updatedItem.id).toSeq
+        todoItems --= todoItems.find(_.id == id).toSeq
       }
+      updatedItem = TodoItem.fromTodoItemData(id, data)
       _ <- IO {
         todoItems += updatedItem
       }
