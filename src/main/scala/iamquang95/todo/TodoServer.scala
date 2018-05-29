@@ -59,6 +59,9 @@ object TodoServer extends StreamApp[IO] with Http4sDsl[IO] {
     case DELETE -> Root / APIUrl / todoId =>
       todoRepo.deleteItem(todoId).flatMap(_.fold(NotFound())(_ => NoContent()))
 
+    case DELETE -> Root / APIUrl =>
+      todoRepo.deleteAll().flatMap(_ => Ok())
+
     case _ =>
       BadRequest()
   }

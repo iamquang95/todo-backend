@@ -54,10 +54,17 @@ final class TodoRepository(
     logger.info("Delete item with id = $id")
     for {
       itemOpt <- IO(todoItems.find(_.id == id))
-      _ <- IO(todoItems.filterNot(item => itemOpt.map(_.id).contains(item.id)))
+      _ <- IO(todoItems --= todoItems.filter(item => itemOpt.map(_.id).contains(item.id)))
     } yield {
       itemOpt.map(_.id)
     }
+  }
+
+  def deleteAll(): IO[Unit] = {
+    logger.info("Delete all items")
+    for {
+      _ <- IO(todoItems --= todoItems)
+    } yield ()
   }
 }
 
