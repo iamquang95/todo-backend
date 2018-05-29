@@ -30,7 +30,7 @@ final class TodoRepository(
     logger.info(s"Try to add TodoItem with data: $data")
     for {
       newId <- TodoItem.generateId
-      newItem = TodoItem(newId, data)
+      newItem = TodoItem.fromTodoItemData(newId, data)
       _ <- IO {
         todoItems += newItem
       }
