@@ -26,7 +26,7 @@ final class TodoRepository(
     }
   }
 
-  def addItem(data: TodoItemData): IO[String] = {
+  def addItem(data: TodoItemData): IO[TodoItem] = {
     logger.info(s"Try to add TodoItem with data: $data")
     for {
       newId <- TodoItem.generateId
@@ -34,10 +34,10 @@ final class TodoRepository(
       _ <- IO {
         todoItems += newItem
       }
-    } yield newId
+    } yield newItem
   }
 
-  def updateItem(updatedItem: TodoItem): IO[Unit] = {
+  def updateItem(updatedItem: TodoItem): IO[TodoItem] = {
     logger.info(s"Update item with id = ${updatedItem.id} as $updatedItem")
     for {
       // TODO: Add validate update unknown item
@@ -47,16 +47,16 @@ final class TodoRepository(
       _ <- IO {
         todoItems += updatedItem
       }
-    } yield ()
+    } yield updatedItem
   }
 
-  def deleteItem(id: String): IO[Option[String]] = {
+  def deleteItem(id: String): IO[Option[TodoItem]] = {
     logger.info("Delete item with id = $id")
     for {
       itemOpt <- IO(todoItems.find(_.id == id))
       _ <- IO(todoItems --= todoItems.filter(item => itemOpt.map(_.id).contains(item.id)))
     } yield {
-      itemOpt.map(_.id)
+      itemOpt
     }
   }
 

@@ -52,7 +52,7 @@ object TodoServer extends StreamApp[IO] with Http4sDsl[IO] {
     case req @ POST -> Root / APIUrl =>
       req.as[TodoItemData].flatMap(todoRepo.addItem).flatMap(Created(_))
 
-    case req @ PUT -> Root / APIUrl =>
+    case req @ PATCH -> Root / APIUrl =>
       req.as[TodoItem].flatMap(todoRepo.updateItem).flatMap(Ok(_))
 
     case DELETE -> Root / APIUrl / todoId =>
