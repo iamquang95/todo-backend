@@ -2,7 +2,7 @@
 
 package iamquang95.todo.model
 
-import java.util.UUID
+import scala.util.Random
 
 import cats.effect.IO
 
@@ -22,7 +22,7 @@ case class TodoItem(
 object TodoItem {
 
   def generateId: IO[String] =
-    IO("tdi" + UUID.randomUUID().toString)
+    IO(Random.nextInt(Integer.MAX_VALUE).toString)
 
   def fromTodoItemData(
     id: String,
