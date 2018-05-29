@@ -5,6 +5,7 @@ package iamquang95.todo.model
 import scala.util.Random
 
 import cats.effect.IO
+import iamquang95.todo.TodoServerConfig
 
 case class TodoItemData(
   title: String = "",
@@ -16,7 +17,8 @@ case class TodoItem(
   id: String,
   title: String,
   completed: Boolean,
-  order: Int
+  order: Int,
+  url: String
 )
 
 object TodoItem {
@@ -31,6 +33,7 @@ object TodoItem {
     id = id,
     title = data.title,
     completed = data.completed,
-    order = data.order
+    order = data.order,
+    url = TodoServerConfig.BASE_URL + id
   )
 }

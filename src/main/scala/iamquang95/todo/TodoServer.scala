@@ -67,12 +67,10 @@ object TodoServer extends StreamApp[IO] with Http4sDsl[IO] {
 
   def stream(args: List[String], requestShutdown: IO[Unit]) = {
 
-    val port: Int = sys.env.getOrElse("PORT", "8080").toInt
-
     val service: HttpService[IO] = CORS[IO](serviceRoutes)
 
     BlazeBuilder[IO]
-      .bindHttp(port, "0.0.0.0")
+      .bindHttp(TodoServerConfig.PORT, "0.0.0.0")
       .mountService(service, "/")
       .serve
   }
