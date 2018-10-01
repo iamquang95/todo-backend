@@ -6,7 +6,7 @@ herokuProcessTypes in Compile := Map(
   "web" -> "target/universal/stage/bin/http4s-todo -Dhttp.port=$PORT"
 )
 
-val Http4sVersion = "0.18.11"
+val Http4sVersion = "0.18.19"
 val Specs2Version = "4.2.0"
 val LogbackVersion = "1.2.3"
 val CirceVersion = "0.9.3"
