@@ -8,7 +8,7 @@ herokuProcessTypes in Compile := Map(
 
 val Http4sVersion = "0.18.19"
 val Specs2Version = "4.3.4"
-val CirceVersion = "0.9.3"
+val CirceVersion = "0.10.0"
 val TypeSafeLogging = "3.9.0"
 
 lazy val root = (project in file("."))
