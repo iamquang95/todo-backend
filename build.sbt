@@ -8,7 +8,6 @@ herokuProcessTypes in Compile := Map(
 
 val Http4sVersion = "0.18.19"
 val Specs2Version = "4.3.4"
-val LogbackVersion = "1.2.3"
 val CirceVersion = "0.9.3"
 val TypeSafeLogging = "3.9.0"
 
@@ -26,7 +25,6 @@ lazy val root = (project in file("."))
       "io.circe" %% "circe-generic-extras" % CirceVersion,
       "org.specs2" %% "specs2-core" % Specs2Version % "test",
       "io.circe" %% "circe-generic" % CirceVersion,
-      "io.circe" %% "circe-literal" % CirceVersion,
-      "ch.qos.logback" % "logback-classic" % LogbackVersion
+      "io.circe" %% "circe-literal" % CirceVersion
     )
   )
