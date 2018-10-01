@@ -9,7 +9,6 @@ herokuProcessTypes in Compile := Map(
 val Http4sVersion = "0.18.19"
 val Specs2Version = "4.3.4"
 val CirceVersion = "0.10.0"
-val TypeSafeLogging = "3.9.0"
 
 lazy val root = (project in file("."))
   .settings(
@@ -18,7 +17,6 @@ lazy val root = (project in file("."))
     version := "0.0.1-SNAPSHOT",
     scalaVersion := "2.12.6",
     libraryDependencies ++= Seq(
-      "com.typesafe.scala-logging" %% "scala-logging" % TypeSafeLogging,
       "org.http4s" %% "http4s-blaze-server" % Http4sVersion,
       "org.http4s" %% "http4s-circe" % Http4sVersion,
       "org.http4s" %% "http4s-dsl" % Http4sVersion,
